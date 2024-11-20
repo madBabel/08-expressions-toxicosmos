@@ -39,4 +39,12 @@ env:
           echo "Step var: ${{ env.STEP_VAR }}" 
           echo "Job var: ${{ env.JOB_VAR }}" 
           echo "Workflow var: ${{ env.WORKFLOW_VAR }}" 
-          echo "Overwritten: ${{ env.OVERWRITTEN }}"   
+          echo "Overwritten: ${{ env.OVERWRITTEN }}"  
+          
+           
+      - name: Overwrite and Print
+        env:
+          OVERWRITTEN: Overwritten at step level.
+        if: ${{inputs.debug && github.ref_name == 'main' }}
+        run: |
+          echo "Overwritten: ${{ env.OVERWRITTEN }}"
