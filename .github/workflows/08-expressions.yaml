@@ -1,7 +1,4 @@
 name: 08 Expressions
-env:
-  WORKFLOW_VAR: This is a workflow-level variable
-  OVERWRITTEN: Default workflow value
 on:
   pull_request:   
   workflow_dispatch:
@@ -12,4 +9,20 @@ on:
       fail:
         type: boolean
         default: false
-
+env:
+  WORKFLOW_VAR: This is a workflow-level variable
+  OVERWRITTEN: Default workflow value
+  jobs:
+  debug-check:
+    runs-on: ubuntu-latest
+    env:
+      JOB_VAR: This is a job-level variable
+      OVERWRITTEN: Overwritten at job level
+    steps:
+      - name: \[Debug\] Print Debug Info
+        if: ${{inputs.debug}}
+        run: |
+          echo  "Triggered by: ${{ github.event_name }}" 
+          echo  "Branch: ${{ github.ref }}" 
+          echo  "Commit SHA: ${{ github.sha }}" 
+          echo  "Runner OS: ${{ runner.os }}"
