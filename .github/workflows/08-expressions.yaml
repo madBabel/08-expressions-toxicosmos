@@ -1,0 +1,15 @@
+name: 08 Expressions
+env:
+  WORKFLOW_VAR: This is a workflow-level variable
+  OVERWRITTEN: Default workflow value
+on:
+  pull_request:   
+  workflow_dispatch:
+    inputs:
+      debug:
+        type: boolean
+        default: false
+      fail:
+        type: boolean
+        default: false
+
