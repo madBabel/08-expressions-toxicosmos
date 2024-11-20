@@ -48,3 +48,51 @@ env:
         if: ${{inputs.debug && github.ref_name == 'main' }}
         run: |
           echo "Overwritten: ${{ env.OVERWRITTEN }}"
+
+
+  functions-pr-data:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Print PR Info
+        if: ${{github.event_name == 'pull_request'}}
+        run: |
+          echo " ${{github.event.pull_request.title}}"
+          cat << EOF
+              ${{ toJSON(github.event.pull_request.labels)}}
+           EOF
+
+      - name: Bug Check
+        if: ${{!cancelled() && contains(github.event.pull_request.title,'fix') }}
+        run: |
+          echo " This PR fixes a bug."
+         
+      - name: Sleep and Cancel       
+        run: |
+          echo "sleep 20"
+          
+      - name: Failing Step      
+        if: ${{inputs.fail}}
+        run: |
+          exit -9
+
+      - name: Conditional Step - Success
+        if: success()       
+        run: |
+          echo "All previous steps succeeded."
+         
+      - name: Conditional Step - Failure   
+        if: failure()
+        run: |
+          echo "A previous step failed.
+          
+      - name: Print Always     
+        if: ${{!cancelled()}}
+        run: |
+          echo "This step runs unless the workflow is cancelled"
+          
+      - name: On Cancel
+        if: cancelled()       
+        run: |
+          echo "Workflow cancelled"
